@@ -17,7 +17,7 @@ pipeline {
             steps {
                 sh "podman stop ${CONTAINER_NAME} || true"
                 sh "podman rm ${CONTAINER_NAME} || true"
-                sh "podman run -dit -p 10080:10080 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
+                sh "podman run -d -p 10080:10080 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
             }
         }
     }
