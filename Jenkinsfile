@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage("build") {
             steps {
-                sh "podman build -t ${IMAGE_NAME}:{IMAGE_TAG} ."
+                sh "podman build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
             }   
         }
         stage("deploy") {
