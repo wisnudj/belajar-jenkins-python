@@ -1,10 +1,14 @@
 pipeline {
     agent any
+
+    environment {
+        IMAGE_NAME = "model-service-dummy:1.0.0"
+    }
     
     stages {
-        stage("hello") {
+        stage("build") {
             steps {
-                echo "hello world"
+                sh "podman build -t ${IMAGE_NAME} ."
             }   
         }
     }
