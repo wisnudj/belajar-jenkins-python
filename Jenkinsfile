@@ -8,6 +8,15 @@ pipeline {
         MINIO_ACCESS   = credentials('minio-access-key')
         MINIO_SECRET   = credentials('minio-secret-key')
     }
+
+    triggers {
+        GenericTrigger(
+            causeString: 'Triggered by MinIO',
+            token: '11d8dc20a6a417d9fdc98f7a4c43992741',
+            printContributedVariables: true,
+            printPostContent: true
+        )
+    }
     
     stages {
         stage("download model") {
