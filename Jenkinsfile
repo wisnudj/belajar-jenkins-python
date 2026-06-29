@@ -12,20 +12,20 @@ pipeline {
     stages {
         stage("download model") {
             steps {
-                sh "mc alias set myminio http://localhost:9000 ${MINIO_ACCESS} ${MINIO_SECRET}"
+                sh "mc alias set myminio http://172.17.0.3:9000 ${MINIO_ACCESS} ${MINIO_SECRET}"
                 sh "mc cp myminio/models/face_detection.json ./models"
             }
         }
         stage("build") {
             steps {
-                sh "podman build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
             }   
         }
         stage("deploy") {
             steps {
-                sh "podman stop ${CONTAINER_NAME} || true"
-                sh "podman rm ${CONTAINER_NAME} || true"
-                sh "podman run -d --network=host --log-driver=k8s-file --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
+                sh "docker stop ${CONTAINER_NAME} || true"
+                sh "docker rm ${CONTAINER_NAME} || true"
+                sh "docker run -d --network=host --log-driver=k8s-file --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
             }
         }
     }
