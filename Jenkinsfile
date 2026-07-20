@@ -3,26 +3,22 @@ pipeline {
 
     environment {
         IMAGE_NAME = "model-service-dummy"
-        IMAGE_TAG  = "${env.BUILD_NUMBER}"
+        IMAGE_TAG  = "v1"
         CONTAINER_NAME = "model-service"
         MINIO_ACCESS   = credentials('minio-access-key')
         MINIO_SECRET   = credentials('minio-secret-key')
     }
 
-    triggers {
-        GenericTrigger(
-            causeString: 'Triggered by MinIO',
-            token: '11d8dc20a6a417d9fdc98f7a4c43992741',
-            printContributedVariables: true,
-            printPostContent: true
-        )
+    parameters {
+        string(name: 'jenis_model', defaultValue: '', description: '')
+        string(name: 'file_model', defaultValue: '', description: '')
     }
     
     stages {
         stage("download model") {
             steps {
                 sh "mc alias set myminio http://172.17.0.3:9000 ${MINIO_ACCESS} ${MINIO_SECRET}"
-                sh "mc cp myminio/models/face_detection.json ./models"
+                sh "mc cp myminio/models/${params.file_model} ./models"
             }
         }
         stage("build") {
