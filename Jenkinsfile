@@ -10,15 +10,14 @@ pipeline {
     }
 
     parameters {
-        string(name: 'jenis_model', defaultValue: '', description: '')
-        string(name: 'file_model', defaultValue: '', description: '')
+        persistentString(name: "blocked_field", defaultValue: "face_detection.json", description: "")
     }
     
     stages {
         stage("download model") {
             steps {
                 sh "mc alias set myminio http://172.17.0.3:9000 ${MINIO_ACCESS} ${MINIO_SECRET}"
-                sh "mc cp myminio/models/${params.file_model} ./models"
+                sh "mc cp myminio/models/${params.blocked_field} ./models"
             }
         }
         stage("build") {
