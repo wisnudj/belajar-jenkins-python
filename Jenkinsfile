@@ -10,7 +10,7 @@ pipeline {
     }
 
     parameters {
-        persistentString(name: "ENVIRONMENT", defaultValue: "dev", description: "")
+        persistentString(name: "ENVIRONMENT", defaultValue: "development", description: "")
         persistentString(name: "MINIO_BUCKET", defaultValue: "dev-model-ml", description: "")
         persistentString(name: "BLOCKED_FIELD", defaultValue: "default/blocked_field_mobilenetv2.onnx", description: "")
         persistentString(name: "COMPLETENESS", defaultValue: "default/completeness_mobilenetv2.onnx", description: "")
@@ -26,6 +26,7 @@ pipeline {
                 sh "mc alias set myminio http://172.17.0.3:9000 ${MINIO_ACCESS} ${MINIO_SECRET}"
 
                 script {
+                    echo "environment is ${params.ENVIRONMENT}"
                     def modelParams = [
                         BLOCKED_FIELD     : params.BLOCKED_FIELD,
                         COMPLETENESS      : params.COMPLETENESS,
@@ -38,7 +39,7 @@ pipeline {
                     modelParams.each { name, value -> 
                         if (value?.trim()) {
                             echo "Downloading model for ${name}: ${value}"
-                            sh "mc cp myminio/models/${value} ./models"
+                            sh "mc cp myminio/${MINIO_BUCKET}/${value} ./models"
                         }
                     }
                 }
