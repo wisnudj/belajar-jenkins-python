@@ -24,7 +24,6 @@ pipeline {
         stage("download model") {
             steps {
                 sh "mc alias set myminio http://172.17.0.2:9000 ${MINIO_ACCESS} ${MINIO_SECRET}"
-                sh "mc cp myminio/models/${params.blocked_field} ./models"
 
                 script {
                     def modelParams = [
