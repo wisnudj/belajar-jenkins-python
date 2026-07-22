@@ -10,7 +10,14 @@ pipeline {
     }
 
     parameters {
-        persistentString(name: "blocked_field", defaultValue: "face_detection.json", description: "")
+        persistentString(name: "ENVIRONMENT", defaultValue: "dev", description: "")
+        persistentString(name: "MINIO_BUCKET", defaultValue: "dev-model-ml", description: "")
+        persistentString(name: "BLOCKED_FIELD", defaultValue: "", description: "")
+        persistentString(name: "COMPLETENESS", defaultValue: "", description: "")
+        persistentString(name: "FACE_QUALITY", defaultValue: "", description: "")
+        persistentString(name: "GLARE", defaultValue: "", description: "")
+        persistentString(name: "OVERLAY_DETECTION", defaultValue: "", description: "")
+        persistentString(name: "PRINTED_COPY", defaultValue: "", description: "")
     }
     
     stages {
@@ -18,6 +25,24 @@ pipeline {
             steps {
                 sh "mc alias set myminio http://172.17.0.2:9000 ${MINIO_ACCESS} ${MINIO_SECRET}"
                 sh "mc cp myminio/models/${params.blocked_field} ./models"
+
+                script {
+                    def modelParams = [
+                        BLOCKED_FIELD     : params.BLOCKED_FIELD,
+                        COMPLETENESS      : params.COMPLETENESS,
+                        FACE_QUALITY      : params.FACE_QUALITY,
+                        GLARE             : params.GLARE,
+                        OVERLAY_DETECTION : params.OVERLAY_DETECTION,
+                        PRINTED_COPY      : params.PRINTED_COPY
+                    ]
+
+                    modelParams.each { name, value -> 
+                        if (value?.trim()) {
+                            echo "Downloading model for ${name}: ${value}"
+                            sh "mc cp myminio/models/${value} ./models"
+                        }
+                    }
+                }
             }
         }
         stage("build") {
