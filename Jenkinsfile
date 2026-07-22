@@ -12,12 +12,12 @@ pipeline {
     parameters {
         persistentString(name: "ENVIRONMENT", defaultValue: "dev", description: "")
         persistentString(name: "MINIO_BUCKET", defaultValue: "dev-model-ml", description: "")
-        persistentString(name: "BLOCKED_FIELD", defaultValue: "", description: "")
-        persistentString(name: "COMPLETENESS", defaultValue: "", description: "")
-        persistentString(name: "FACE_QUALITY", defaultValue: "", description: "")
-        persistentString(name: "GLARE", defaultValue: "", description: "")
-        persistentString(name: "OVERLAY_DETECTION", defaultValue: "", description: "")
-        persistentString(name: "PRINTED_COPY", defaultValue: "", description: "")
+        persistentString(name: "BLOCKED_FIELD", defaultValue: "default/blocked_field_mobilenetv2.onnx", description: "")
+        persistentString(name: "COMPLETENESS", defaultValue: "default/completeness_mobilenetv2.onnx", description: "")
+        persistentString(name: "FACE_QUALITY", defaultValue: "default/face_quality_mobilenetv2.onnx", description: "")
+        persistentString(name: "GLARE", defaultValue: "default/glare_mobilenetv2.onnx", description: "")
+        persistentString(name: "OVERLAY_DETECTION", defaultValue: "default/overlay_detection_mobilenetv2.onnx", description: "")
+        persistentString(name: "PRINTED_COPY", defaultValue: "default/printed_copy_mobilenetv2.onnx", description: "")
     }
     
     stages {
