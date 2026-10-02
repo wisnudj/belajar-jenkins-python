@@ -23,7 +23,7 @@ pipeline {
     stages {
         stage("download model") {
             steps {
-                sh "mc alias set myminio http://172.17.0.4:9000 ${MINIO_ACCESS} ${MINIO_SECRET}"
+                sh "mc alias set myminio http://172.17.0.3:9000 ${MINIO_ACCESS} ${MINIO_SECRET}"
 
                 script {
                     echo "environment is ${params.ENVIRONMENT}"
